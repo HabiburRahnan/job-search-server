@@ -28,6 +28,32 @@ async function run() {
     const jobCollection = client.db("jobSearch").collection("allJobs");
     const applyJobCollection = client.db("jobSearch").collection("applyJob");
 
+    app.post("/applyJob", async (req, res) => {
+      const addedCartProduct = req.body;
+      const result = await applyJobCollection.insertOne(addedCartProduct);
+    });
+    app.get("/applyJob", async (req, res) => {
+      const cursor = applyJobCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.delete("/addNewJob/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await jobCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    
+
+
+    app.get("/addNewJob", async (req, res) => {
+      const cursor = jobCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     app.get("/addNewJob/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
