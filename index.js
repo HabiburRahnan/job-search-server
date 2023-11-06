@@ -45,12 +45,41 @@ async function run() {
       res.send(result);
     });
 
-    
-
+    app.get("/job", async (req, res) => {
+      // console.log(req.query?.email);
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email };
+      }
+      const result = await jobCollection.find(query).toArray();
+      res.send(result);
+    });
 
     app.get("/addNewJob", async (req, res) => {
       const cursor = jobCollection.find();
       const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.put("/addNewJob/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedJob = req.body;
+      const product = {
+        $set: {
+          job_title: updatedJob.job_title,
+          displayName: updatedJob.displayName,
+          description: updatedJob.description,
+          job_type: updatedJob.job_type,
+          salary: updatedJob.salary,
+          photo: updatedJob.photo,
+          postingDate: updatedJob.postingDate,
+          applicationDate: updatedJob.applicationDate,
+          applicationNumber: updatedJob.applicationNumber,
+        },
+      };
+      const result = await jobCollection.updateOne(filter, product, options);
       res.send(result);
     });
 
