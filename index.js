@@ -34,6 +34,21 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/applyJob", async (req, res) => {
+      // console.log(req.query?.email);
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email };
+      }
+      const result = await jobCollection.find(query).toArray();
+      res.send(result);
+    });
+    app.get("/applyJob", async (req, res) => {
+      const cursor = applyJobCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     app.get("/job", async (req, res) => {
       // console.log(req.query?.email);
       let query = {};
@@ -43,6 +58,7 @@ async function run() {
       const result = await jobCollection.find(query).toArray();
       res.send(result);
     });
+
     app.delete("/addNewJob/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
