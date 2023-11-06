@@ -29,19 +29,8 @@ async function run() {
     const applyJobCollection = client.db("jobSearch").collection("applyJob");
 
     app.post("/applyJob", async (req, res) => {
-      const addedCartProduct = req.body;
-      const result = await applyJobCollection.insertOne(addedCartProduct);
-    });
-    app.get("/applyJob", async (req, res) => {
-      const cursor = applyJobCollection.find();
-      const result = await cursor.toArray();
-      res.send(result);
-    });
-
-    app.delete("/addNewJob/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await jobCollection.deleteOne(query);
+      const addedJob = req.body;
+      const result = await applyJobCollection.insertOne(addedJob);
       res.send(result);
     });
 
@@ -52,6 +41,12 @@ async function run() {
         query = { email: req.query.email };
       }
       const result = await jobCollection.find(query).toArray();
+      res.send(result);
+    });
+    app.delete("/addNewJob/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await jobCollection.deleteOne(query);
       res.send(result);
     });
 
